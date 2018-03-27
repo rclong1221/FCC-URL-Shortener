@@ -1,6 +1,6 @@
 const validUrl = require('valid-url')
 
-var URL = require("../models/urlShortener.model.js")
+const URL = require("../models/urlShortener.model.js")
 
 class URLShortener {
   static shortToOriginal(req, res) {
