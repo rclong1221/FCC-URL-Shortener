@@ -6,25 +6,25 @@ class URLShortener {
   static shortToOriginal(req, res) {
     var urlToForward = req.params.urlToForward
     URL.findOne({ 'shorterUrl': urlToForward }, function(err, data){
-      if (err) return res.send('Error reading database')
+      if (err) res.send('Error reading database')
       var reg = new RegExp("^(http||https)://", "i")
 
-      if (data && reg.test(data.originalUrl)) return res.redirect(301, data.originalUrl)
-      else if (data) return res.redirect(301, `http://${data.originalUrl}`)
+      if (data && reg.test(data.originalUrl)) res.redirect(301, data.originalUrl)
+      else if (data) res.redirect(301, `http://${data.originalUrl}`)
     })
   }
   static originalToShort(req, res) {
     var urlToShorten = req.params.urlToShorten
     if (validUrl.isUri(urlToShorten)){
       URL.findOne({ 'originalUrl': urlToShorten }, function(err, data){
-        if (err) return res.send('Error reading database')
+        if (err) res.send('Error reading database')
 
         if (data) {
           let d = {
             "originalUrl": data["originalUrl"],
             "shorterUrl": data["shorterUrl"]
           }
-          return res.json(d)
+          res.json(d)
         }
         else {
           var short = Math.floor(Math.random() * 10000).toString()
@@ -33,16 +33,16 @@ class URLShortener {
             shorterUrl: short
           })
           data.save(function (err) {
-            if (err) return res.send('Error saving to database')
+            if (err) res.send('Error saving to database')
           })
           let d = {
             "originalUrl": data["originalUrl"],
             "shorterUrl": data["shorterUrl"]
           }
-          return res.json(d)
+          res.json(d)
         }
       })
-    } else return res.json({ error: 'Invalid URL' })
+    } else res.json({ error: 'Invalid URL' })
   }
 }
 
