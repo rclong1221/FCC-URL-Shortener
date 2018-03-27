@@ -9,21 +9,20 @@ class URLShortener {
       if (err) return res.send('Error reading database');
       var reg = new RegExp("^(http||https)://", "i");
 
-      if (reg.test(data.originalUrl)) return res.redirect(301, data.originalUrl)
-      else return res.redirect(301, `http://${data.originalUrl}`)
+      if (data && reg.test(data.originalUrl)) return res.redirect(301, data.originalUrl)
+      else if (data) return res.redirect(301, `http://${data.originalUrl}`)
     });
   }
   static originalToShort(req, res) {
     var urlToShorten = req.params.urlToShorten;
     if (validUrl.isUri(urlToShorten)){
-
       URL.findOne({ 'originalUrl': urlToShorten }, function(err, data){
         if (err) return res.send('Error reading database');
 
         if (data) {
           let d = {
-            "originalUrl": data.originalUrl,
-            "shorterUrl": data.shorterUrl
+            "originalUrl": data["originalUrl"],
+            "shorterUrl": data["shorterUrl"]
           }
           return res.json(d);
         }
@@ -37,8 +36,8 @@ class URLShortener {
             if (err) return res.send('Error saving to database');
           });
           let d = {
-            "originalUrl": data.originalUrl,
-            "shorterUrl": data.shorterUrl
+            "originalUrl": data["originalUrl"],
+            "shorterUrl": data["shorterUrl"]
           }
           return res.json(d);
         }
