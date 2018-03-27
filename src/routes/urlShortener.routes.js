@@ -8,10 +8,10 @@ var urlShortenerRoutes = function (app) {
   // Create a new shortened URL
   app.get('/new/:urlToShorten(*)', function(req, res){
     URLShortener.originalToShort(req, res)
-  });
+  })
   app.get('/:urlToForward', function(req, res){
     URLShortener.shortToOriginal(req, res)
-  });
+  })
 }
 
 module.exports = urlShortenerRoutes
