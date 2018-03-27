@@ -6,7 +6,7 @@ class URLShortener {
   static shortToOriginal(req, res) {
     var urlToForward = req.params.urlToForward
     URL.findOne({ 'shorterUrl': urlToForward }, function(err, data){
-      if (err) res.send('Error reading database')
+      if (err) res.send('Error querying database')
       var reg = new RegExp("^(http||https)://", "i")
 
       if (data && reg.test(data.originalUrl)) res.redirect(301, data.originalUrl)
@@ -17,7 +17,7 @@ class URLShortener {
     var urlToShorten = req.params.urlToShorten
     if (validUrl.isUri(urlToShorten)){
       URL.findOne({ 'originalUrl': urlToShorten }, function(err, data){
-        if (err) res.send('Error reading database')
+        if (err) res.send('Error querying database')
 
         if (data) {
           let d = {
